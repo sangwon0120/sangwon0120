@@ -1,0 +1,83 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+typedef struct Node {
+	int coef;
+	int exp;
+	Node* next;
+}Node;
+
+typedef struct List{
+	Node* header;
+	int n;
+}List;
+
+// 리스트 초기화
+List* initialize()
+{
+    List* list = (List*)malloc(sizeof(List));
+    list->header = (Node*)malloc(sizeof(Node));
+    list->n = 0;
+    return list;
+}
+
+
+void appendTerm(Node* k, int c, int e) { //기존 다항식의 마지막 항을 표현하는 노드 k, 계수 c와 차수 e
+    Node * t= (Node*)malloc(sizeof(Node)); // 새노드 t
+    t->coef = c; // t의 계수 =c
+    t->exp = e;//t의 차수 =e
+    t->next = NULL; // t가 마지막이니까 next NULL
+    k->next = t; 
+    k = t;
+}
+Node* addPoly(Node* x, Node* y) {
+    Node * result = (Node*)malloc(sizeof(Node));
+    Node* i = (Node*)malloc(sizeof(Node));
+    Node* j = (Node*)malloc(sizeof(Node));
+    result->next = NULL;
+    i = x->next;
+    j = y->next;
+    Node* k = result;
+    while ((i != NULL) && (j != NULL)) {
+        if (i->exp > j->exp) {
+            appendTerm(k, i->coef, i->exp);
+            i = i->next;
+        }
+        else if (i->exp < j->exp) {
+            appendTerm(k, j->coef, j->exp);
+            j = j->next;
+        }
+        else {
+            int sum = i->coef + j->coef;
+            if (sum != 0)
+                appendTerm(k, sum, i->exp);
+            i = i->next;
+            j = j->next;
+        }
+    }
+    while (i != NULL) {
+        appendTerm(k, i->coef, i->exp);
+        i = i->next;
+    }
+    while (j != NULL) {
+        appendTerm(k, j->coef, j->exp);
+        j = j->next;
+    }
+    return result;
+
+}
+
+int main(void)
+{
+    List* list = initialize();
+    appendTerm(list->header, 0, 0); // 일단 첫번째 노드 만들어둠.
+    int poly1, poly2;
+    scanf("%d", &poly1);
+    for (int i = 0; i < poly1; i++) {
+        int coef1, exp1;
+        scanf("%d %d", &coef1,&exp1);
+        appendTerm(list->header)
+    }
+    return 0;
+}
